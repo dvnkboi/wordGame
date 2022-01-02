@@ -9,7 +9,7 @@
       <div
         class="w-7/12 bg-gray-50 shadow-2xl rounded-3xl h-full transform transition duration-1000 delay-300"
       >
-        <Game @guessedWord="handleGuess" :word="word" />
+        <Game @guessedWord="handleGuess" :word="word" :lettersLeft="lettersLeft" :round="round" />
       </div>
     </transition>
 
@@ -26,11 +26,12 @@
 <script>
 import Chat from './components/chat.vue'
 import Game from './components/game.vue'
-import { map, wait } from './js/utils';
+import { map, wait, getWordArray, words } from './js/utils';
 
 export default {
   data() {
     return {
+      round: 0,
       playingUser: {
         id: '1234',
       },
@@ -51,44 +52,7 @@ export default {
           score: Infinity,
         }
       },
-      word: [
-        {
-          ltr: 'v',
-          isGuessed: false
-        },
-        {
-          ltr: 'e',
-          isGuessed: false
-        },
-        {
-          ltr: 'r',
-          isGuessed: false
-        },
-        {
-          ltr: 'y',
-          isGuessed: false
-        },
-        {
-          ltr: ' ',
-          isGuessed: true
-        },
-        {
-          ltr: 'l',
-          isGuessed: false
-        },
-        {
-          ltr: 'o',
-          isGuessed: false
-        },
-        {
-          ltr: 'n',
-          isGuessed: false
-        },
-        {
-          ltr: 'g',
-          isGuessed: false
-        },
-      ],
+      word: [],
       letterCount: 0,
       lettersLeft: 0,
       user: {
@@ -98,59 +62,83 @@ export default {
       guessText: {
         msg: '',
         timeStamp: new Date()
-      }
+      },
+      guessLock: false,
     }
   },
   methods: {
-    handleGuess(letter, correct) {
+    async handleGuess(letter, correct) {
+      if (this.guessLock) return;
+      this.guessLock = true;
       if (this.lettersLeft > 0) {
 
-        setTimeout(() => {
+        await wait(50);
+
+        //check if letter in word and display guess text
+        this.guessText = {
+          msg: `${this.users[this.playingUser.id].name} guessed ${letter}`,
+          timeStamp: new Date()
+        }
+
+
+        await wait(500 + Math.random() * 1000);
+
+        if (correct) {
+          this.handleCorrectGuess(letter);
+
           //check if letter in word and display guess text
           this.guessText = {
-            msg: `${this.users[this.playingUser.id].name} guessed ${letter}`,
+            msg: `${letter} is in the word! ${this.users[this.playingUser.id].name} scores some points`,
             timeStamp: new Date()
           }
 
-          setTimeout(() => {
-            if (correct) {
-              this.handleCorrectGuess(letter);
+          await wait(300);
 
-              //check if letter in word and display guess text
-              this.guessText = {
-                msg: `${letter} is in the word! ${this.users[this.playingUser.id].name} scores some points`,
-                timeStamp: new Date()
-              }
-            }
-            else {
-              this.users[this.playingUser.id].lives--;
+          if (this.lettersLeft <= 0) {
+            alert('u win');
+            this.startGame();
+          }
+        }
+        else {
+          this.users[this.playingUser.id].lives--;
 
-              //check if letter in word and display guess text
-              this.guessText = {
-                msg: `${letter} is not in the word! :c ${this.users[this.playingUser.id].name} loses a life`,
-                timeStamp: new Date()
-              }
-            }
-            if (this.user.lives <= 0) {
-              alert('u lost');
-            }
-          }, 500 + Math.random() * 1000);
-        }, 50);
+          //check if letter in word and display guess text
+          this.guessText = {
+            msg: `${letter} is not in the word! :c ${this.users[this.playingUser.id].name} loses a life`,
+            timeStamp: new Date()
+          }
+        }
+        if (this.user.lives <= 0) {
+          alert('u lost');
+          this.startGame();
+        }
       }
+      this.guessLock = false;
     },
-    handleCorrectGuess(letter) {
-      this.word.find(ltr => ltr.ltr === letter).isGuessed = true;
-      this.users[this.playingUser.id].score += Math.ceil(map(this.lettersLeft, this.letterCount, 0, 20, 0));
-      this.lettersLeft--;
+    handleCorrectGuess(inputLetter) {
+      this.word.map(letter => {
+        if (letter.ltr.toLowerCase() == inputLetter.toLowerCase()) {
+          letter.isGuessed = true;
+          this.users[this.playingUser.id].score += Math.ceil(map(this.lettersLeft, this.letterCount, 0, 20, 0));
+          this.lettersLeft--;
+        }
+      });
+    },
+    startGame() {
+      this.round++;
+      this.word = getWordArray(words[Math.floor(Math.random() * words.length)]);
+      this.word.forEach(letter => {
+        if (letter.ltr != ' ') this.letterCount++;
+        if (!letter.isGuessed) {
+          this.lettersLeft++;
+        }
+      });
     }
   },
   async mounted() {
-    this.word.forEach(letter => {
-      if (letter.ltr != ' ') this.letterCount++;
-      if (!letter.isGuessed) {
-        this.lettersLeft++;
-      }
-    });
+
+    //get random word
+    this.startGame();
 
     await wait(2000);
 
@@ -207,3 +195,40 @@ export default {
   transform: translateY(25px);
 }
 </style>  
+
+
+<style type="text/css">
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-button {
+  width: 24px;
+  height: 24px;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-200;
+  border: 0px none #ffffff;
+  border-radius: 100px;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-slate-300;
+}
+::-webkit-scrollbar-thumb:active {
+  @apply bg-slate-300;
+}
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+  border: 0px none #ffffff;
+  border-radius: 100px;
+}
+::-webkit-scrollbar-track:hover {
+  @apply bg-transparent;
+}
+::-webkit-scrollbar-track:active {
+  @apply bg-slate-400 bg-opacity-20;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+</style>
