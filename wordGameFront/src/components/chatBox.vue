@@ -1,19 +1,14 @@
 <template>
-  <div class="p-5 w-full">
-    <div
-      class="w-full h-16 p-2 flex justify-center items-center rounded-2xl shadow-xl bg-slate-100 relative"
-    >
+  <div class="p-5 w-full bg-transparent">
+    <div class="w-full h-12 flex justify-start items-center bg-transparent relative p-0.5">
       <input
-        class="w-full h-full text-xl outline-none bg-none rounded-2xl relative z-50"
+        class="w-full h-full text-xl bg-gray-100 rounded-2xl relative z-50 focus:border-none border-none focus:ring-2 hover:ring-2 hover:ring-opacity-75 ring-opacity-0 ring-0 ring-pink-400 focus:ring-pink-400 transition duration-300"
         type="text"
       />
-      <div
-        class="rounded-2xl bg-blue-400 shrink-0 absolute top-0 right-0 bottom-0 left-0 z-10"
-      >
-        <i
-          class="ri-send-plane-fill text-2xl text-gray-50 -mb-1 -ml-0.5 transform transition duration-300"
-        ></i>
+      <div class="relative w-16 h-full z-50 flex justify-center items-center">
+        <i class="ri-send-plane-fill text-2xl text-gray-50 -ml-1 transform transition duration-300"></i>
       </div>
+      <div class="rounded-[18px] bg-blue-400 shrink-0 absolute top-0 right-0 bottom-0 left-0 z-10"></div>
     </div>
   </div>
 </template>

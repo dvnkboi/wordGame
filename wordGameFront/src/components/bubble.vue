@@ -1,6 +1,5 @@
 <template>
   <div
-    :key="key"
     class="flex justify-start items-center flex-col w-full bg-gray-100 rounded-2xl shadow-xl relative overflow-hidden"
   >
     <div
@@ -12,15 +11,17 @@
     <div
       class="flex justify-start items-center w-full gap-2 bg-gray-100 shadow-lg shadow-gray-200 rounded-2xl px-5 py-2"
     >
-      <div
-        class="flex justify-center items-center rounded-full bg-slate-50 h-12 w-12 overflow-hidden"
-      >
-        <img
-          src="https://thecatapi.com/api/images/get?format=src&type=jpg"
-          alt="cat"
-          srcset
-          class="w-full h-full object-cover"
-        />
+      <div class="flex justify-center items-center h-12 w-12">
+        <div
+          class="p-1 bg-gradient-to-tr from-fuchsia-400 to-orange-400 w-14 h-14 rounded-full shrink-0"
+        >
+          <img
+            src="https://thecatapi.com/api/images/get?format=src&type=jpg"
+            alt="cat"
+            srcset
+            class="w-full h-full object-cover rounded-full outline outline-gray-100 outline-2"
+          />
+        </div>
       </div>
       <div class="flex justify-start items-start flex-col">
         <div
@@ -38,7 +39,6 @@
 export default {
   data() {
     return {
-      key: 0,
     }
   },
   props: {
@@ -59,9 +59,6 @@ export default {
     },
   },
   mounded() {
-    this.$nextTick(() => {
-      this.key = Math.random();
-    });
   }
 }
 </script>
