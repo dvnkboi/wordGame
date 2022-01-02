@@ -10,7 +10,7 @@
         class="text-5xl font-bold italic"
         :key="idx"
         v-for="(letter,idx) in word"
-      >{{ letter.isGuessed ? letter.ltr : '&#8213' }}</h1>
+      >{{ letter.isGuessed ? letter.ltr : '&#8213;' }}</h1>
     </div>
   </div>
 </template>

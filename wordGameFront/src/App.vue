@@ -3,13 +3,21 @@
     <transition name="fade-left" appear>
       <div
         class="w-2/12 bg-gray-50 shadow-2xl rounded-3xl h-full transform transition duration-1000 delay-300"
-      ></div>
+      >
+        <div id="scoreBoardContainer"></div>
+      </div>
     </transition>
     <transition name="fade-down" appear>
       <div
         class="w-7/12 bg-gray-50 shadow-2xl rounded-3xl h-full transform transition duration-1000 delay-300"
       >
-        <Game @guessedWord="handleGuess" :word="word" :lettersLeft="lettersLeft" :round="round" />
+        <Game
+          @guessedWord="handleGuess"
+          :word="word"
+          :lettersLeft="lettersLeft"
+          :round="round"
+          id="gameContainer"
+        />
       </div>
     </transition>
 
@@ -17,7 +25,7 @@
       <div
         class="w-3/12 bg-gray-50 shadow-2xl rounded-3xl h-full transform transition duration-1000 delay-300"
       >
-        <Chat :users="users" :guessText="guessText" :playingUser="playingUser" />
+        <Chat :users="users" :guessText="guessText" :playingUser="playingUser" id="chatContainer" />
       </div>
     </transition>
   </div>
@@ -55,10 +63,6 @@ export default {
       word: [],
       letterCount: 0,
       lettersLeft: 0,
-      user: {
-        name: '',
-        lives: 3,
-      },
       guessText: {
         msg: '',
         timeStamp: new Date()
@@ -74,12 +78,7 @@ export default {
 
         await wait(50);
 
-        //check if letter in word and display guess text
-        this.guessText = {
-          msg: `${this.users[this.playingUser.id].name} guessed ${letter}`,
-          timeStamp: new Date()
-        }
-
+        this.botSpeak(`${this.users[this.playingUser.id].name} guessed ${letter}`);
 
         await wait(500 + Math.random() * 1000);
 
@@ -87,10 +86,7 @@ export default {
           this.handleCorrectGuess(letter);
 
           //check if letter in word and display guess text
-          this.guessText = {
-            msg: `${letter} is in the word! ${this.users[this.playingUser.id].name} scores some points`,
-            timeStamp: new Date()
-          }
+          this.botSpeak(`${letter} is in the word! ${this.users[this.playingUser.id].name} scores some points`);
 
           await wait(300);
 
@@ -101,12 +97,7 @@ export default {
         }
         else {
           this.users[this.playingUser.id].lives--;
-
-          //check if letter in word and display guess text
-          this.guessText = {
-            msg: `${letter} is not in the word! :c ${this.users[this.playingUser.id].name} loses a life`,
-            timeStamp: new Date()
-          }
+          this.botSpeak(`${letter} is not in the word! :c ${this.users[this.playingUser.id].name} loses a life`);
         }
         if (this.user.lives <= 0) {
           alert('u lost');
@@ -133,6 +124,12 @@ export default {
           this.lettersLeft++;
         }
       });
+    },
+    botSpeak(msg) {
+      this.guessText = {
+        msg: msg,
+        timeStamp: new Date()
+      }
     }
   },
   async mounted() {
@@ -143,18 +140,11 @@ export default {
     await wait(2000);
 
     //check if letter in word and display guess text
-    this.guessText = {
-      msg: `Welcome to Word guesser`,
-      timeStamp: new Date()
-    }
+    this.botSpeak(`Welcome to the game! ${this.users[this.playingUser.id].name} starts the game`);
 
     await wait(500);
 
-    //check if letter in word and display guess text
-    this.guessText = {
-      msg: `the word you have to guess has ${this.lettersLeft} letters`,
-      timeStamp: new Date()
-    }
+    this.botSpeak(`the word you have to guess has ${this.lettersLeft} letters`);
 
   },
   components: {

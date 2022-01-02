@@ -16,7 +16,7 @@
           class="p-1 bg-gradient-to-tr from-fuchsia-400 to-orange-400 w-14 h-14 rounded-full shrink-0"
         >
           <img
-            src="https://thecatapi.com/api/images/get?format=src&type=jpg"
+            :src="user.img"
             alt="cat"
             srcset
             class="w-full h-full object-cover rounded-full outline outline-gray-100 outline-2"
@@ -51,8 +51,9 @@ export default {
     user: {
       type: Object,
       default: {
-        userName: 'user',
+        userName: 'Cat',
         points: 0,
+        img: 'https://thecatapi.com/api/images/get?format=src&type=jpg',
       },
     },
     message: {
