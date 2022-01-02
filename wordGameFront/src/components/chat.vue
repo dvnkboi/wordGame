@@ -1,18 +1,21 @@
 <template>
   <div class="h-full w-full flex justify-start items-center flex-col gap-5">
     <div
+      ref="scrollChat"
       class="h-full w-full flex justify-start items-center flex-col gap-5 overflow-auto p-5 pb-10"
     >
-      <bubble
-        :key="message"
-        v-for="message in messages"
-        :lives="message"
-        :message="'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem, aliquid? Magnam id rerum aperiam odio libero. Non totam maiores deleniti sapiente dolorum quibusdam accusamus natus optio. Id ad repellendus rerum! '"
-        :user="{ userName: 'user' + message, points: message }"
-      />
+      <transition-group name="fade-left" appear>
+        <bubble
+          class="transition duration-300"
+          :key="message"
+          v-for="message in messages"
+          :lives="users[message.userId].lives"
+          :message="message.message"
+          :user="{ userName: users[message.userId].name, points: users[message.userId].score }"
+        />
+      </transition-group>
     </div>
-    <chat-box />
-    
+    <chat-box @msgSend="handleMsg" />
   </div>
 </template>
 
@@ -23,15 +26,46 @@ import chatBox from './chatBox.vue'
 export default {
   data() {
     return {
-      messages: [1, 2, 3, 4, 5]
+      messages: []
     }
   },
   components: {
     bubble,
     chatBox
-  }
+  },
+  methods: {
+    handleMsg(msg) {
+      this.messages.push({
+        userId: this.playingUser.id,
+        message: msg
+      });
+      this.$nextTick(() => {
+        this.$refs.scrollChat.scrollTop = this.$refs.scrollChat.scrollHeight;
+      });
+    }
+  },
+  watch: {
+    guessText: {
+      handler: function (guessText) {
+        this.messages.push({
+          userId: '0',
+          message: guessText.msg
+        });
+        this.$nextTick(() => {
+          this.$refs.scrollChat.scrollTop = this.$refs.scrollChat.scrollHeight;
+        });
+      },
+      deep: true
+    }
+  },
+  props: ['users', 'guessText', 'playingUser']
 }
 </script>
 
-<style>
+<style scoped>
+.fade-left-enter-from,
+.fade-left-leave-to {
+  opacity: 0;
+  transform: translateX(-25px);
+}
 </style>
