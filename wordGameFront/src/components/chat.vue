@@ -7,11 +7,12 @@
         :key="message"
         v-for="message in messages"
         :lives="message"
-        :message="'hey'"
+        :message="'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem, aliquid? Magnam id rerum aperiam odio libero. Non totam maiores deleniti sapiente dolorum quibusdam accusamus natus optio. Id ad repellendus rerum! '"
         :user="{ userName: 'user' + message, points: message }"
       />
     </div>
     <chat-box />
+    
   </div>
 </template>
 

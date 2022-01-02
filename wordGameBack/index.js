@@ -1,10 +1,14 @@
-const app = require('express')();
+this
 
 
-app.use('/',(req,res,next)=>{
-    console.log('Request URL:',req.originalUrl);
-    next();
-});
+function addition(a,b){
+    return a+b;
+}
 
-app.listen(3001);
+class add{
+    addition(a,b){
+        this.result = a + b;
+    }
+}
 
+console.log(addition(1,2));

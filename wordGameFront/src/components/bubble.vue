@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex justify-start items-center flex-col w-full bg-gray-100 rounded-2xl shadow-xl relative overflow-hidden"
+    class="flex justify-start items-center flex-col w-full bg-gray-100 rounded-2xl shadow-xl relative"
   >
     <div
       v-if="lives != null"
@@ -31,7 +31,7 @@
       </div>
     </div>
     <!-- ? this is bottom portion: msg text -->
-    <div class="flex justify-start items-center w-full text-lg font-medium px-5 py-2">{{ message }}</div>
+    <div class="flex justify-start items-center w-full text-lg font-medium px-5 py-2 shrink-0 ">{{ message }}</div>
   </div>
 </template>
 
