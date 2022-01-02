@@ -99,7 +99,7 @@ export default {
           this.users[this.playingUser.id].lives--;
           this.botSpeak(`${letter} is not in the word! :c ${this.users[this.playingUser.id].name} loses a life`);
         }
-        if (this.user.lives <= 0) {
+        if (this.users[this.playingUser.id].lives <= 0) {
           alert('u lost');
           this.startGame();
         }
