@@ -11,7 +11,7 @@
           v-for="message in messages"
           :lives="users[message.userId].lives"
           :message="message.message"
-          :user="{ userName: users[message.userId].name, points: users[message.userId].score }"
+          :user="{ userName: users[message.userId].name, points: users[message.userId].score, img: users[message.userId].img }"
         />
       </transition-group>
     </div>

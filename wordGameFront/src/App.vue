@@ -48,16 +48,19 @@ export default {
           name: 'user1',
           lives: 3,
           score: 0,
+          img: 'https://i.pravatar.cc/300?img=3',
         },
         '2345': {
           name: 'user2',
           lives: 3,
           score: -1,
+          img: 'https://i.pravatar.cc/300?img=2',
         },
         '0': {
           name: 'Guess Bot',
           lives: Infinity,
           score: Infinity,
+          img: 'https://i.pravatar.cc/300?img=1',
         }
       },
       word: [],

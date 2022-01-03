@@ -1,8 +1,8 @@
+// @ts-nocheck
 import { mount } from '@vue/test-utils'
 import App from '../App.vue'
 require("babel-core/register");
 require("babel-polyfill");
-// import '@types/jest'
 
 const div = document.createElement('div')
 div.id = 'root'
